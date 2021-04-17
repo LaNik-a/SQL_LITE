@@ -51,7 +51,7 @@ public class Main {
         System.out.println();
         while (resSet.next()) {
             for (int i = 1; i <= data.getColumnCount(); i++) {
-                System.out.println(resSet.getString(i) + "    ");
+                System.out.print(resSet.getString(i) + "    ");
             }
             System.out.println();
         }
