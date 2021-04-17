@@ -1,6 +1,7 @@
 package ru.hse.dz;
 
 import java.sql.*;
+import java.util.Optional;
 
 
 public class DataBase {
@@ -22,45 +23,20 @@ public class DataBase {
     }
 
     /**
-     * Выполнение запроса
+     * Выполнение запроса и возвращение результата запроса
      *
      * @param query строка запроса
      */
-    public static void makeQuery(String query) {
-        try {
-            if (statement.execute(query)) {
-                ResultSet resSet = statement.getResultSet();
-                ResultSetMetaData data = resSet.getMetaData();
-                printResultQuery(resSet, data);
-            } else {
-                System.out.println("Запрос выполнен успешно");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Ошибка в запросе");
+    public static Optional<ResultSet> makeQuery(String query) throws SQLException {
+        Optional<ResultSet> resSet = Optional.empty();
+        if (statement.execute(query)) {
+            resSet = Optional.ofNullable(statement.getResultSet());
+        } else {
+            System.out.println("Запрос выполнен успешно");
         }
-
+        return resSet;
     }
 
-    /**
-     * Вывод информации по запросу, отдающему результат
-     *
-     * @param resSet результат запроса
-     * @param data   данные, полученные после запроса
-     * @throws SQLException Когда JDBC обнаруживает ошибку во время взаимодействия с источником данных
-     */
-    private static void printResultQuery(ResultSet resSet, ResultSetMetaData data) throws SQLException {
-        for (int i = 1; i <= data.getColumnCount(); i++) {
-            System.out.print(data.getColumnLabel(i) + "    ");
-        }
-        System.out.println();
-        while (resSet.next()) {
-            for (int i = 1; i <= data.getColumnCount(); i++) {
-                System.out.println(resSet.getString(i) + "    ");
-            }
-            System.out.println();
-        }
-        resSet.close();
-    }
 
     /**
      * Закрытие подключений к базе sql lite
