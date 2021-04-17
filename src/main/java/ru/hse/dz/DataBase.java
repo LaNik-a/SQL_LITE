@@ -28,15 +28,11 @@ public class DataBase {
      * @param query строка запроса
      */
     public static Optional<ResultSet> makeQuery(String query) throws SQLException {
-        Optional<ResultSet> resSet = Optional.empty();
-        if (statement.execute(query)) {
-            resSet = Optional.ofNullable(statement.getResultSet());
-        } else {
-            System.out.println("Запрос выполнен успешно");
-        }
+        Optional<ResultSet> resSet;
+        statement.execute(query);
+        resSet = Optional.ofNullable(statement.getResultSet());
         return resSet;
     }
-
 
     /**
      * Закрытие подключений к базе sql lite
